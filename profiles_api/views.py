@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from profiles_api import serializers
 from profiles_api import models
@@ -109,4 +111,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name','email',)
        
+
+class UserLoginApiView(ObtainAuthToken):
+    """Handle creating user authentication tokens"""
+    #ObtainAuthToken : It compares this information with the user records in the database. If the information is correct, it generates a unique token (login key) for that user and returns it as a response. If the information is incorrect, it returns an error message.
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES #visual enhancement
        
