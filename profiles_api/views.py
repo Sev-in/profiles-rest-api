@@ -2,8 +2,11 @@ from rest_framework.views import APIView #This is the basic "pattern" or "toolbo
 from rest_framework.response import Response #This is a specialized tool used to return a response from an API. It automatically converts Python data (such as a dictionary or list) into a format the client understands (usually JSON).
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 
 from profiles_api import serializers
+from profiles_api import models
+from profiles_api import permission
 
 
 class HelloApiView(APIView):
@@ -92,3 +95,15 @@ class HelloViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         """Handle removing an object"""
         return Response({'http_methos':'DELETE'})
+    
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating and updating profiles"""
+    #The most important feature of ModelViewSet is that it automatically provides all of the standard CRUD (Create, Read, Update, Delete) operations for you.
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    #When the list operation is called, it returns the entire queryset. For operations that operate on a single object, such as retrieve, update, or destroy, it finds the correct object from the queryset using the ID (pk) from the URL. 
+    authentication_classes = (TokenAuthentication,) #Tuple
+    permission_classes = (permission.UpdateOwnProfile,)
+       
+       
