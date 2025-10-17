@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.conf import settings
 
 
 class UserProfileManager(BaseUserManager):
@@ -52,4 +53,18 @@ class UserProfile(AbstractBaseUser, PermissionsMixin): #Inherits
     def __str__(self):
         """Return string representation of our user"""
         return self.email
+    
+
+class ProfileFeedItem(models.Model):
+    """Profile status update"""
+    user_profile = models.ForeignKey( #It creates a connection 🔗 between a post and the user who shared it.
+        settings.AUTH_USER_MODEL, #Instead of writing models.UserProfile directly, it tells Django to "Use whatever is defined as the user model in your project's settings (settings.py). This makes your code more flexible and reusable.
+        on_delete= models.CASCADE #If the user who owns this post is deleted from the database, all posts by that user will be automatically deleted as well.
+    )
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """Return the model as a string"""
+        return self.status_text
 

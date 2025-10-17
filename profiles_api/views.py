@@ -6,6 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from rest_framework.permissions import IsAuthenticated
 
 from profiles_api import serializers
 from profiles_api import models
@@ -116,4 +117,17 @@ class UserLoginApiView(ObtainAuthToken):
     """Handle creating user authentication tokens"""
     #ObtainAuthToken : It compares this information with the user records in the database. If the information is correct, it generates a unique token (login key) for that user and returns it as a response. If the information is incorrect, it returns an error message.
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES #visual enhancement
-       
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """Handles creating, reading and updating profile feed items"""
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfileFeedItemSerializer
+    queryset = models.ProfileFeedItem.objects.all()
+    permission_classes = (
+        permission.UpdateOwnStatus,
+        IsAuthenticated # or IsAuthenticatedOrReadOnly
+    )
+
+    def perform_create(self, serializer):
+        """Sets the user profile to the logged in user"""
+        serializer.save(user_profile=self.request.user)

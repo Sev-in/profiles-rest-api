@@ -3,5 +3,6 @@ from django.contrib import admin #It includes Django's admin site-related tools 
 from profiles_api import models 
 
 admin.site.register(models.UserProfile) #Get the UserProfile model and display it on my admin site
+admin.site.register(models.ProfileFeedItem)
 
 # Register your models here.
