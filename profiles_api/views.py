@@ -3,6 +3,7 @@ from rest_framework.response import Response #This is a specialized tool used to
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
 
 from profiles_api import serializers
 from profiles_api import models
@@ -103,7 +104,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
     #When the list operation is called, it returns the entire queryset. For operations that operate on a single object, such as retrieve, update, or destroy, it finds the correct object from the queryset using the ID (pk) from the URL. 
-    authentication_classes = (TokenAuthentication,) #Tuple
+    authentication_classes = (TokenAuthentication,) #Python knows that this must be a tuple and not a single element
     permission_classes = (permission.UpdateOwnProfile,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name','email',)
        
        
