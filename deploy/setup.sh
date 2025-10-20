@@ -10,15 +10,23 @@ PROJECT_BASE_PATH='/usr/local/apps/profiles-rest-api'
 # Set Ubuntu Language
 locale-gen en_GB.UTF-8
 
+
 # Install Python, SQLite and pip
 echo "Installing dependencies..."
+
+# First we install a tool to add PPA
+apt-get install -y software-properties-common
+
+# We add the 'deadsnakes' repository to the system so it can find Python 3.8
+add-apt-repository ppa:deadsnakes/ppa -y
 apt-get update
+
 # CORRECT FORM ✅
 apt-get install -y python3-dev python3-venv python3-pip sqlite3 nginx git
 mkdir -p $PROJECT_BASE_PATH
 git clone $PROJECT_GIT_URL $PROJECT_BASE_PATH
 
-python3 -m venv $PROJECT_BASE_PATH/env
+python3.8 -m venv $PROJECT_BASE_PATH/env
 
 ## Remove the uWSGI version lock to make pip install the latest version
 $PROJECT_BASE_PATH/env/bin/pip install -r $PROJECT_BASE_PATH/requirement.txt uwsgi
