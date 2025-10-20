@@ -25,7 +25,7 @@ apt-get update
 
 
 # CORRECT FORM ✅
-apt-get install -y python3.8 python3.8-venv python3.8-dev python3-pip sqlite3 nginx git build-essential
+apt-get install -y python3.8 python3.8-venv python3.8-dev python3-pip sqlite3 nginx git build-essential supervisor
 
 mkdir -p $PROJECT_BASE_PATH
 git clone $PROJECT_GIT_URL $PROJECT_BASE_PATH
