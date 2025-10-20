@@ -124,4 +124,4 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'profiles_api.UserProfile' #For all user-related operations (login, registration, authorization, etc.), use the UserProfile model that I created in the profiles_api application, not your standard, built-in User model.
 
-STATIC_ROOT = 'static/'
+STATIC_ROOT = 'static/' #It tells Django where to use it to collect all of your project's static files (CSS, JavaScript, images, etc.) in one place.
