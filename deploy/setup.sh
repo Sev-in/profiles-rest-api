@@ -13,16 +13,20 @@ locale-gen en_GB.UTF-8
 
 # Install Python, SQLite and pip
 echo "Installing dependencies..."
-
-# First we install a tool to add PPA
-apt-get install -y software-properties-common
-
-# We add the 'deadsnakes' repository to the system so it can find Python 3.8
-add-apt-repository ppa:deadsnakes/ppa -y
 apt-get update
 
+
+# We install the necessary tool to add PPA (external repository).
+apt-get install -y software-properties-common
+# We add the 'deadsnakes' repository to the system so it can find Python 3.8.
+add-apt-repository ppa:deadsnakes/ppa -y
+# After adding the new repository, we update the package list again.
+apt-get update
+
+
 # CORRECT FORM ✅
-apt-get install -y python3-dev python3-venv python3-pip sqlite3 nginx git
+apt-get install -y python3.8 python3.8-venv python3.8-dev python3-pip sqlite3 nginx git build-essential
+
 mkdir -p $PROJECT_BASE_PATH
 git clone $PROJECT_GIT_URL $PROJECT_BASE_PATH
 
@@ -42,8 +46,8 @@ supervisorctl restart profiles_api
 
 # Setup nginx to make our application accessible.
 cp $PROJECT_BASE_PATH/deploy/nginx_profiles_api.conf /etc/nginx/sites-available/profiles_api.conf
-rm /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/profiles_api.conf /etc/nginx/sites-enabled/profiles_api.conf
+rm -f /etc/nginx/sites-enabled/default
+ln -s -f /etc/nginx/sites-available/profiles_api.conf /etc/nginx/sites-enabled/profiles_api.conf
 systemctl restart nginx.service
 
 echo "DONE! :)"
